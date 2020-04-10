@@ -68,6 +68,10 @@ public class Curso {
 			e.printStackTrace();
 		}
 	}
+	
+	public int getCreditos() {
+		return creditos;
+	}
 
 
 }
