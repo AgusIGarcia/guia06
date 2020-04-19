@@ -43,6 +43,7 @@ class AlumnoTest {
 	@Test
 	void testEquals() {
 		assertTrue(a1.equals(a2));	
+		//PREGUNTAR
 	}
 	
 	@Test

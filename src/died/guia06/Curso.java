@@ -2,6 +2,7 @@ package died.guia06;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import died.guia06.util.Registro;
@@ -62,14 +63,27 @@ public class Curso {
 	 * @param a
 	 * @return
 	 */
-	public Boolean inscribir(Alumno a) {
+	public Boolean inscribir(Alumno a) throws ExcepcionInscripcion, RegistroAuditoriaException{
+		
+		boolean cumpleCreditos = a.creditosObtenidos() >= this.creditosRequeridos;
+		boolean cumpleMateriasCiclo = a.cantidadCursosCiclo(this.cicloLectivo) < 3;
+		boolean hayCupo = inscriptos.size() < cupo;
+		
+		if(!cumpleCreditos) throw new ExcepcionInscripcion("No posee creditos suficientes");
+		if(!cumpleMateriasCiclo) throw new ExcepcionInscripcion("Ya esta inscripto en 3 materias de este ciclo lectivo");
+		if(!hayCupo) throw new ExcepcionInscripcion("No hay mas cupo");
+		
+		inscriptos.add(a);
+		a.inscripcionAceptada(this);
 		try {
 			log.registrar(this, "inscribir ",a.toString());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Inscripto correctamente.");
+			return true;
+		} 
+		catch (IOException e) {
+			throw new RegistroAuditoriaException();
 		}
-		return false;
+		
 	}
 	
 	
@@ -77,7 +91,20 @@ public class Curso {
 	 * imprime los inscriptos en orden alfabetico
 	 */
 	public void imprimirInscriptos() {
+		this.inscriptos.sort(null);
 		try {
+			System.out.println(this.inscriptos.toString());
+			log.registrar(this, "imprimir listado",this.inscriptos.size()+ " registros ");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void imprimirInscriptos(Comparator<Alumno> c) {
+		inscriptos.sort(c);
+		try {
+			System.out.println(this.inscriptos.toString());
 			log.registrar(this, "imprimir listado",this.inscriptos.size()+ " registros ");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -88,6 +115,8 @@ public class Curso {
 	public int getCreditos() {
 		return creditos;
 	}
-
+	public int getCicloLectivo() {
+		return cicloLectivo;
+	}
 
 }

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class Alumno implements Comparable{
+public class Alumno implements Comparable<Alumno>{
 
 	private String nombre;
 	private Integer nroLibreta;
@@ -29,7 +29,7 @@ public class Alumno implements Comparable{
 		this.aprobados = new ArrayList<Curso>();
 	}
 
-	public int creditosObtenidos() {
+	public Integer creditosObtenidos() {
 		return creditos;
 	}
 
@@ -48,8 +48,8 @@ public class Alumno implements Comparable{
 	}
 
 	@Override
-	public int compareTo(Object o) {
-		return this.nombre.compareTo(((Alumno)o).nombre);
+	public int compareTo(Alumno o) {
+		return this.nombre.compareTo(o.nombre);
 	}
 
 	public List<Curso> getCursando() {
@@ -60,7 +60,25 @@ public class Alumno implements Comparable{
 		return aprobados;
 	}
 
+	public int cantidadCursosCiclo(int ciclo) {
+		
+		int cant = 0;
+		for(Curso cc : cursando) {
+			if(cc.getCicloLectivo() == ciclo) cant++;
+		}
+		return cant;
+		
+	}
 
+	public Integer getNroLibreta() {
+		return nroLibreta;
+	}
+
+	@Override
+	public String toString() {
+		return "Alumno [nombre=" + nombre + ", nroLibreta=" + nroLibreta + ", cursando=" + cursando + ", aprobados="
+				+ aprobados + ", creditos=" + creditos + "]";
+	}
 	
 
 }
